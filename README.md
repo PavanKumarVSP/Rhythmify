@@ -1,1 +1,1 @@
-Rhythamify is a Music Streaming WebApplication which allows connect with Friends group or and Share the VibZZ.
+Rhythamify is a Music Streaming WebApplication which allows to create & connect with Friends group and Share the VibZZ.
