@@ -1,47 +1,45 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven3'
+        jdk 'JDK11'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/your/repo.git', branch: 'main'
+                checkout scm
             }
         }
-        stage('Build') {
+
+        stage('Build & Test') {
             steps {
-                // for Java/Maven
-                sh 'mvn clean package'
+                dir('backend/DiscoveryServer') {
+                    // On Windows use bat
+                    bat 'mvn clean package'
+                }
             }
         }
-        stage('Test') {
+
+        stage('Deploy / Publish') {
             steps {
-                sh 'mvn test'
-            }
-        }
-        stage('Publish') {
-            steps {
-                // e.g. mvn deploy or push artifact
-                sh 'mvn deploy'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                // custom deployment, e.g. copying files, invoking scripts
-                sh './deploy.sh'
+                dir('backend/DiscoveryServer') {
+                    bat 'mvn deploy'
+                }
             }
         }
     }
 
     post {
         always {
-            // e.g. cleanup, archive artifacts, send email/slack
             cleanWs()
         }
         success {
-            echo 'Build succeeded!'
+            echo 'Pipeline succeeded'
         }
         failure {
-            echo 'Build failed!'
+            echo 'Pipeline failed'
         }
     }
 }
