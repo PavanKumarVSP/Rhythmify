@@ -1,12 +1,10 @@
 package com.example.userService.controller;
 
-
 import ch.qos.logback.core.util.StringUtil;
 import com.example.userService.POJO.User;
 import com.example.userService.POJO.UserResponse;
 import com.example.userService.exception.UsernameAlreadyExistsException;
 import com.example.userService.repo.UserRepo;
-import com.example.userService.service.UserService;
 import com.example.userService.service.UserValidationService;
 import com.example.userService.utils.UserResponseConstants;
 import org.slf4j.Logger;
@@ -14,7 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.Authenticator;
 import java.util.Calendar;
@@ -58,22 +59,22 @@ public class UserController {
         }
 
 
-       long uniqueId= Calendar.getInstance().getTimeInMillis();
+        long uniqueId= Calendar.getInstance().getTimeInMillis();
 
-       Date date=Calendar.getInstance().getTime();
+        Date date=Calendar.getInstance().getTime();
 
-       user.setUserId(String.valueOf(uniqueId));
-       user.setUserCreationDate(date);
-       user.setUserActive(true);
+        user.setUserId(String.valueOf(uniqueId));
+        user.setUserCreationDate(date);
+        user.setUserActive(true);
 
-       try{
-           User userInstance =userRepo.save(user);
+        try{
+            User userInstance =userRepo.save(user);
 
-       }
-       catch (Exception e){
-           System.out.println("Exception occurred during the user saving operation "+e);
-           return (ResponseEntity<?>) ResponseEntity.unprocessableEntity();
-       }
+        }
+        catch (Exception e){
+            System.out.println("Exception occurred during the user saving operation "+e);
+            return (ResponseEntity<?>) ResponseEntity.unprocessableEntity();
+        }
 
         return ResponseEntity.ok(user);
     }
@@ -123,3 +124,4 @@ public class UserController {
 
 
 }
+

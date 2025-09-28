@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/your/repo.git', branch: 'main'
+            }
+        }
+        stage('Build') {
+            steps {
+                // for Java/Maven
+                sh 'mvn clean package'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Publish') {
+            steps {
+                // e.g. mvn deploy or push artifact
+                sh 'mvn deploy'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // custom deployment, e.g. copying files, invoking scripts
+                sh './deploy.sh'
+            }
+        }
+    }
+
+    post {
+        always {
+            // e.g. cleanup, archive artifacts, send email/slack
+            cleanWs()
+        }
+        success {
+            echo 'Build succeeded!'
+        }
+        failure {
+            echo 'Build failed!'
+        }
+    }
+}
